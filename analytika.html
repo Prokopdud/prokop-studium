@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://keguwppdetlgfzozngvk.supabase.co wss://keguwppdetlgfzozngvk.supabase.co; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="analytika.css">
+<title>Analytika studovny – Studovna FBMI</title>
+<script src="supabase.js"></script>
+<script src="auth.js" data-url="https://keguwppdetlgfzozngvk.supabase.co" data-key="sb_publishable_vde1q6kr64k81rFKdOVTTw_qFQ07n6V" data-public></script>
+<script src="vendor/chart.umd.min.js"></script>
+</head>
+<body>
+<header>
+  <div>
+    <a class="back" href="index.html">← Studovna</a>
+    <h1>Analytika studovny</h1>
+    <p class="sub" id="sub">Ověřuji přístup…</p>
+  </div>
+  <div class="range" role="group" aria-label="Období">
+    <button type="button" data-days="7" disabled>7 dní</button>
+    <button type="button" data-days="14" class="on" disabled>14 dní</button>
+    <button type="button" data-days="30" disabled>30 dní</button>
+  </div>
+</header>
+<main class="wrap">
+  <section class="gate" id="gate" hidden>
+    <h2 id="gateTitle">Analytika je jen pro správce</h2>
+    <p id="gateMsg"></p>
+    <a class="btn" id="gateLink" href="prihlaseni.html?next=analytika.html">Přihlásit se</a>
+  </section>
+  <div id="dash" hidden>
+    <section class="kpis">
+      <div class="kpi"><small>Návštěvy (relace)</small><b id="kSess">–</b><div class="delta" id="kSessD"></div></div>
+      <div class="kpi"><small>Zobrazení stránek</small><b id="kViews">–</b><div class="delta" id="kViewsD"></div></div>
+      <div class="kpi"><small>Prům. aktivní čas</small><b id="kTime">–</b><div class="delta">na zobrazení stránky</div></div>
+      <div class="kpi"><small>Dokončené sim. testy</small><b id="kSim">–</b><div class="delta" id="kSimD"></div></div>
+    </section>
+    <section class="grid">
+      <div class="card">
+        <h2>Návštěvy v čase</h2>
+        <div class="chart"><canvas id="cVisits"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Zařízení</h2>
+        <div class="chart sm"><canvas id="cDevices"></canvas></div>
+        <p class="empty" id="eDevices" hidden>Zatím žádná data.</p>
+      </div>
+    </section>
+    <section class="grid">
+      <div class="card">
+        <h2>Nejnavštěvovanější stránky</h2>
+        <table id="tblPages">
+          <thead><tr><th>Stránka</th><th>Zobrazení</th><th>Aktivní čas</th><th>Scroll</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p class="note">Klikni na řádek pro detail stránky.</p>
+      </div>
+      <div class="card">
+        <h2>Zdroje návštěv (referrer)</h2>
+        <div class="chart sm"><canvas id="cRef"></canvas></div>
+        <p class="empty" id="eRef" hidden>Zatím žádná data.</p>
+      </div>
+    </section>
+    <section class="grid3">
+      <div class="card">
+        <h2>Použití funkcí / nástrojů</h2>
+        <div class="chart sm"><canvas id="cFeat"></canvas></div>
+        <p class="empty" id="eFeat" hidden>Zatím žádná data.</p>
+      </div>
+      <div class="card">
+        <h2>Hledané pojmy</h2>
+        <table id="tblSearch"><thead><tr><th>Dotaz</th><th>×</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="card">
+        <h2>Hloubka scrollu</h2>
+        <div class="chart sm"><canvas id="cScroll"></canvas></div>
+        <p class="empty" id="eScroll" hidden>Zatím žádná data.</p>
+      </div>
+    </section>
+    <section class="card drill" id="drill">
+      <h2>Detail stránky: <span id="drillTitle">—</span> <span class="pill" id="drillPath"></span></h2>
+      <div class="grid flush">
+        <div><div class="chart sm"><canvas id="cDrill"></canvas></div></div>
+        <div>
+          <table><tbody id="drillStats"></tbody></table>
+          <p class="note">Aktivní čas, scroll a akce na téhle stránce ve zvoleném období.</p>
+        </div>
+      </div>
+    </section>
+    <p class="note" id="srcNote"></p>
+  </div>
+</main>
+<footer>Anonymní měření · bez IP, e-mailů a jmen · jen náhodné ID relace a prohlížeče. Stránka není v menu.</footer>
+<script src="analytika.js"></script>
+</body>
+</html>

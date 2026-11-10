@@ -15,7 +15,7 @@ w.addEventListener('click',function(e){if(e.target===w){e.preventDefault();e.sto
 w.addEventListener('wheel',function(e){e.preventDefault()},{passive:false});w.addEventListener('touchmove',function(e){e.preventDefault()},{passive:false});
 var d=document.createElement('div');d.id='cbar';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label','Souhlas s měřením návštěvnosti');
 d.style.cssText='width:90vw;max-width:520px;box-sizing:border-box;background:#fff;color:#1d2321;border:1px solid #d9dfdc;border-radius:16px;padding:22px 22px 20px;font:16px/1.5 system-ui,sans-serif;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:flex-end';
-var p=document.createElement('p');p.style.cssText='margin:0;flex:1 1 100%';p.textContent='Smím anonymně měřit návštěvnost (Google Analytics)? Pomůže mi to zjistit, které lekce se používají.';
+var p=document.createElement('p');p.style.cssText='margin:0;flex:1 1 100%';p.textContent='Smím anonymně měřit návštěvy a používání? Stejný souhlas zapne Google Analytics i vlastní měření studovny (v naší databázi, bez osobních údajů).';
 var a=document.createElement('button'),r=document.createElement('button');a.textContent='Souhlasím';r.textContent='Odmítnout';a.type=r.type='button';
 var bs='border-radius:999px;padding:11px 20px;font:inherit;font-size:16px;font-weight:600;cursor:pointer;';a.style.cssText=bs+'background:#1f6f5c;color:#fff;border:1px solid #1f6f5c';r.style.cssText=bs+'background:transparent;color:#1f6f5c;border:1px solid #c9d1cd';
 a.onclick=function(){set('yes');close();load()};r.onclick=function(){set('no');close()};

@@ -25,6 +25,19 @@ var sg = M.merge('sg_hk_proto_v1', { r01_0: 1 }, { a01: 1, r01_1: 0 });
 assert.strictEqual(sg.r01_0, 1);
 assert.strictEqual(sg.a01, 1);
 
+var bio = M.merge('bio_p01_study_v1',
+  { ex: { q001: { ok: 1, n: 1 }, exam_0: { ok: 10, n: 20 } }, anki: {}, t: 4, inp: {} },
+  { ex: { exam_0: { ok: 18, n: 20 } }, anki: {}, t: 1, inp: {} }
+);
+assert.strictEqual(bio.ex.q001.ok, 1);
+assert.strictEqual(bio.ex.exam_0.ok, 18);
+assert.strictEqual(bio.t, 4);
+var bioLekce = M.merge('bio_p01_lekce_v1', { r01: 1, q001: 1 }, { a01: 1 });
+assert.strictEqual(bioLekce.r01, 1);
+assert.strictEqual(bioLekce.q001, 1);
+assert.strictEqual(bioLekce.a01, 1);
+assert.ok(M.isKey('bio_p01_study_v1') && M.isKey('bio_p01_lekce_v1'));
+
 var fresh = M.reconcile('latina_study_L1', null, { s1e0: { best: 10 } }, false);
 assert.strictEqual(fresh.writeLocal, true);
 assert.strictEqual(fresh.push, false);

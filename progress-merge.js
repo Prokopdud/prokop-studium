@@ -8,7 +8,8 @@
   var KEYS = [
     'anat_svaly_hk_study_v1', 'anat_axial_study_v1',
     'latina_study_L1', 'latina_study_L2', 'latina_study_L3',
-    'latina_study_L4', 'latina_study_L5', 'latina_study_L6',
+    'latina_study_L4', 'latina_study_L5',     'latina_study_L6',
+    'bio_p01_study_v1', 'bio_p01_lekce_v1',
     'sg_hk_proto_v1', 'sh_done', 'sh_fav', 'sh_last'
   ];
 
@@ -91,10 +92,12 @@
     return out;
   }
 
+  function anatShape(key) { return key.indexOf('anat_') === 0 || key === 'bio_p01_study_v1'; }
+
   function merge(key, local, remote) {
-    if (key.indexOf('anat_') === 0) return mergeAnat(local, remote);
+    if (anatShape(key)) return mergeAnat(local, remote);
     if (key.indexOf('latina_study_') === 0) return mergeLatina(local, remote);
-    if (key === 'sg_hk_proto_v1') return mergeSg(local, remote);
+    if (key === 'sg_hk_proto_v1' || key === 'bio_p01_lekce_v1') return mergeSg(local, remote);
     if (key === 'sh_done' || key === 'sh_fav') return mergeFlags(local, remote);
     if (local != null) return local;
     return remote;
@@ -103,7 +106,7 @@
   function reconcile(key, localRaw, remote, cleared) {
     var local = parse(localRaw);
     if (cleared) {
-      var state = local == null ? (key === 'sh_last' ? null : (key.indexOf('anat_') === 0 ? { ex: {}, anki: {}, t: 0, inp: {} } : {})) : local;
+      var state = local == null ? (key === 'sh_last' ? null : (anatShape(key) ? { ex: {}, anki: {}, t: 0, inp: {} } : {})) : local;
       return { state: state, push: true, writeLocal: false };
     }
     if (local == null && (remote == null)) return { state: null, push: false, writeLocal: false };

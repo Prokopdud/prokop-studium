@@ -80,6 +80,7 @@ function installMock() {
   window.__sbMock = {
     auth: {
       getSession: function () {
+        if (/(?:\?|&)nav=out(?:&|$)/.test(location.search)) return Promise.resolve({ data: { session: null } });
         return Promise.resolve({ data: { session: { user: { id: '11111111-1111-4111-8111-111111111111', email: 'student@example.com' } } } });
       },
       onAuthStateChange: function () { return { data: { subscription: { unsubscribe: function () {} } } }; },
@@ -88,7 +89,7 @@ function installMock() {
     rpc: function (name, args) {
       args = args || {};
       var data = null;
-      if (name === 'my_role') data = /lekce\.html$/.test(location.pathname) || /svaly-hlavy-krku/.test(location.pathname) ? 'moderator' : 'user';
+      if (name === 'my_role') data = /(?:\?|&)nav=out(?:&|$)/.test(location.search) ? 'user' : (/lekce\.html$/.test(location.pathname) || /svaly-hlavy-krku|profil\.html/.test(location.pathname) ? 'moderator' : 'user');
       else if (name === 'my_dashboard') data = dash();
       else if (name === 'send_friend_request') {
         var code = String(args.p_code || '').toUpperCase().replace(/\s/g, '');
@@ -247,6 +248,29 @@ async function lessonFlow(page, tag) {
   await shot(page, 'lekce-stranka-' + tag);
 }
 
+async function navFlow(page, path, tag, mobile) {
+  await prepare(page, path);
+  await page.waitForSelector('#account');
+  if (mobile) {
+    await page.click('#burger');
+    await page.waitForSelector('#menu.open');
+  }
+  var h = mobile ? 720 : 150;
+  await page.screenshot({ path: OUT + '/nav-' + tag + '.png', clip: { x: 0, y: 0, width: page.viewport().width, height: h } });
+  console.log('saved nav', tag);
+  var info = await page.evaluate(function () {
+    var links = Array.prototype.map.call(document.querySelectorAll('#menu a, #account'), function (a) { return a.textContent.replace(/\s+/g, ' ').trim(); });
+    return { text: document.body.innerText, links: links, accounts: document.querySelectorAll('#account').length };
+  });
+  if (info.accounts !== 1) throw new Error('expected one account entry, got ' + info.accounts + ' ' + info.links.join(' | '));
+  if (info.text.indexOf('student@example.com') >= 0) throw new Error('email visible in nav');
+  if (info.links.filter(function (t) { return t === 'Účet' || t.indexOf('Účet') >= 0; }).length) throw new Error('Účet still in nav: ' + info.links.join(' | '));
+}
+
+await withPage(desktop, async function (page) { await navFlow(page, '/o-webu.html?nav=out', 'odhlaseno-desktop', false); });
+await withPage(mobile, async function (page) { await navFlow(page, '/o-webu.html?nav=out', 'odhlaseno-mobil', true); });
+await withPage(desktop, async function (page) { await navFlow(page, '/index.html', 'prihlaseno-desktop', false); });
+await withPage(mobile, async function (page) { await navFlow(page, '/index.html', 'prihlaseno-mobil', true); });
 await withPage(desktop, async function (page) { await profileFlow(page, 'desktop'); });
 await withPage(mobile, async function (page) { await profileFlow(page, 'mobil'); });
 await withPage(desktop, async function (page) { await lessonFlow(page, 'desktop'); });

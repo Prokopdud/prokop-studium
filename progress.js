@@ -222,11 +222,33 @@
     return 'dní';
   }
 
+  function accountHtml() {
+    var staff = state.staff
+      ? '<a class="btn" href="' + base() + 'spravce.html">Správa</a><a class="btn" href="' + base() + 'moderatori/index.html">Pro moderátory</a>'
+      : '';
+    return '<h2>Účet</h2><div class="panel"><div class="btns left">' +
+      '<a class="btn" href="' + base() + 'prihlaseni.html?zmena=1&next=' + encodeURIComponent(base() + 'profil.html') + '">Změnit heslo</a>' +
+      '<button class="btn" type="button" id="sp-out">Odhlásit</button>' + staff +
+      '</div><p class="sub" style="margin:10px 0 0">Odhlášení a změna hesla jsou tady, v profilu. E-mail se neukazuje.</p></div>';
+  }
+  function bindAccount() {
+    var b = document.getElementById('sp-out');
+    if (!b) return;
+    b.onclick = function () {
+      try { localStorage.removeItem('sh_pin_ok'); } catch (e) {}
+      var c = sb();
+      var done = function () { location.href = base() + 'prihlaseni.html?out=1'; };
+      if (c && c.auth && c.auth.signOut) c.auth.signOut().then(done, done);
+      else done();
+    };
+  }
+
   function renderProfile() {
     var root = document.getElementById('profil-app');
     if (!root) return;
     if (state.failed && !profile()) {
-      root.innerHTML = '<p class="panel">Postup se teď nepodařilo načíst z účtu. V lekcích zůstává uložený v prohlížeči.</p>';
+      root.innerHTML = '<p class="panel">Postup se teď nepodařilo načíst z účtu. V lekcích zůstává uložený v prohlížeči.</p>' + accountHtml();
+      bindAccount();
       return;
     }
     var p = profile();
@@ -249,9 +271,10 @@
       '<h2>Tvůj postup</h2><div class="grid3">' + subjects +
       '<div class="panel stat"><small>Nejdelší série</small><b>' + p.longest_streak + ' ' + days(p.longest_streak) + '</b><div class="bar"><i style="width:' + lvlPct + '%"></i></div><span class="sub">aktuálně ' + p.streak + ' ' + days(p.streak) + '</span></div></div>' +
       '<h2>Žebříček <small id="sp-cap">tento týden</small></h2><div class="panel" id="sp-board"></div>' +
-      '<h2>Přezdívka a soukromí</h2><div class="panel sp-form" id="sp-settings"></div>';
+      '<h2>Přezdívka a soukromí</h2><div class="panel sp-form" id="sp-settings"></div>' + accountHtml();
     renderBoard();
     renderSettings();
+    bindAccount();
     ensureDialog();
     var kod = new URLSearchParams(location.search).get('kod');
     if (kod) {

@@ -36,6 +36,7 @@ var sp=new URLSearchParams(location.search).get('s');if(sp&&subjects.indexOf(sp)
 chips();render();
 window.addEventListener('pageshow',render);window.addEventListener('storage',render);
 $('lessons').addEventListener('keydown',function(e){var c=e.target.closest('[data-href]');if(c&&e.key==='Enter')location.href=c.dataset.href});
+window.addEventListener('studovna-progress',function(){try{render()}catch(e){}});
 }
 /* pomodoro */
 if($('pgo')){
@@ -66,11 +67,12 @@ if($('ankigroups')){var g={};ANK.forEach(function(l){if(l.anki)(g[l.subj]=g[l.su
  $('ankigroups').innerHTML=Object.keys(g).map(function(s){var tot=g[s].reduce(function(a,l){return a+l.anki.cards},0);
   return '<section class="panel"><h3>'+(s==='Latina'?'🏛️':'🫀')+' '+esc(s)+' <small class="sub">'+g[s].length+' balíčků · '+tot+' karet</small></h3><ul class="dl">'+g[s].map(function(l){return '<li><span class="grow"><b>'+esc(l.title)+'</b><br><span class="sub">'+esc(l.anki.deck)+' · '+l.anki.cards+' karet · '+l.anki.mb+' MB</span></span><a class="btn sm" href="'+l.anki.file+'" download>⬇ .apkg</a></li>'}).join('')+'</ul></section>'}).join('')||'<p class="empty">Zatím žádné balíčky.</p>'}
 /* home */
-if($('cont')){var last=ls('sh_last',null),P=D.lessons.map(function(l){return{l:l,p:progress(l)}});
+function renderHome(){if(!$('cont'))return;var last=ls('sh_last',null),P=D.lessons.map(function(l){return{l:l,p:progress(l)}});
  var cur=P.filter(function(x){return x.l.slug===last})[0]||P.filter(function(x){return x.p.pct>0&&x.p.pct<100})[0];
  var card=function(x,lbl){return '<a class="card wide" href="viewer.html?l='+encodeURIComponent(x.l.slug)+'"><div class="tag'+(x.l.type==='lat'?' lat':'')+'">'+esc(x.l.subj)+(lbl?' · '+lbl:'')+'</div><h3>'+esc(x.l.title)+'</h3><p>'+esc(x.l.desc)+'</p><div class="bar"><i style="width:'+x.p.pct+'%"></i></div><div class="row"><span class="sub grow">'+(x.p.manual?'✅ hotovo':x.p.done+'/'+x.p.total+' cvičení · '+x.p.pct+' %')+'</span><span class="btn sm pri">Pokračovat →</span></div></a>'};
  var started=P.filter(function(x){return x.p.pct>0&&x.p.pct<100&&(!cur||x.l.slug!==cur.l.slug)}).slice(0,2);
  $('cont').innerHTML=cur?'<div class="rail">'+card(cur,'naposledy otevřeno')+started.map(function(x){return card(x,'rozpracováno')}).join('')+'</div>':'<div class="panel row wrapr"><span class="grow">Zatím jsi nic neotevřel. Začni třeba první lekcí latiny nebo svaly hlavy a krku.</span><a class="btn pri" href="lekce.html">Vybrat lekci →</a></div>';
  var bySubj={};P.forEach(function(x){var b=bySubj[x.l.subj]=bySubj[x.l.subj]||{n:0,s:0,d:0};b.n++;b.s+=x.p.pct;if(x.p.pct>=100)b.d++});
  $('stats').innerHTML=Object.keys(bySubj).map(function(s){var b=bySubj[s],pc=Math.round(b.s/b.n);return '<a class="panel stat" href="lekce.html?s='+encodeURIComponent(s)+'"><small>'+esc(s)+'</small><b>'+pc+' %</b><div class="bar"><i style="width:'+pc+'%"></i></div><span class="sub">'+b.d+' z '+b.n+' lekcí hotovo</span></a>'}).join('')}
+if($('cont')){renderHome();window.addEventListener('studovna-progress',renderHome)}
 })();

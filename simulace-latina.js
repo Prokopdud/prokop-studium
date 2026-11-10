@@ -6,7 +6,8 @@ function base(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f
 function lat(s){return base(s.replace(/æ/gi,'ae').replace(/œ/gi,'oe')).split(' ').map(function(w){return AB[w]||w}).join(' ').replace(/y/g,'y')}
 function ok(it,v){var f=it[0]=='L'?lat:base;return it[2].split('|').some(function(a){return f(a)==f(v)})}
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.random()*(i+1)|0,t=a[i];a[i]=a[j];a[j]=t}return a}
-function start(items,name){cur=items;$('setup').hidden=true;$('res').hidden=true;$('test').hidden=false;$('vname').textContent=name;
+var testKind='full';
+function start(items,name,kind){testKind=kind||'full';cur=items;$('setup').hidden=true;$('res').hidden=true;$('test').hidden=false;$('vname').textContent=name;
  $('qs').innerHTML=items.map(function(it,i){return '<div class="q"><span class="n">'+(i+1)+'.</span><label for="q'+i+'"><span class="tag">'+(it[0]=='L'?'→ latinsky':'→ česky')+'</span>'+esc(it[1])+'</label><input id="q'+i+'" autocomplete="off" autocapitalize="off" spellcheck="false" lang="'+(it[0]=='L'?'la':'cs')+'"></div>'}).join('');
  tl=Math.max(1,+$('min').value||30)*60;clearInterval(tmr);tick();tmr=setInterval(tick,1000);scrollTo(0,0)}
 function esc(s){return s.replace(/[&<>"]/g,function(c){return'&#'+c.charCodeAt(0)+';'})}
@@ -16,7 +17,8 @@ function finish(timeout){clearInterval(tmr);var bad=[],g=0;cur.forEach(function(
  r.innerHTML=(timeout?'<p class="banner">⏰ Čas vypršel – test odevzdán automaticky.</p>':'')+'<h2>Výsledek: '+g+' / '+cur.length+' ('+p+' %)</h2>'+
  (bad.length?'<h3>Chyby ('+bad.length+')</h3><div class="sim">'+bad.map(function(b){return '<div class="q bad"><label><span class="tag">'+esc(b[0][1])+'</span>Tvoje: <i>'+(esc(b[1])||'—')+'</i></label><span>✔ <b>'+esc(b[0][2].split('|')[0])+'</b></span></div>'}).join('')+'</div>':'<p>Bez chyby! 🎉</p>')+
  '<p class="btns left">'+(bad.length?'<button class="btn pri" id="retry">🔁 Zopakovat jen chyby</button>':'')+'<button class="btn" id="again">Nový test</button></p>';
- if(bad.length)$('retry').onclick=function(){$('min').value=Math.max(3,Math.ceil(bad.length*0.45));start(bad.map(function(b){return b[0]}),'Opakování chyb')};
+ if(testKind==='full'){try{if(window.StudovnaProgress)window.StudovnaProgress.quiz('simulace','simulace-latina',sel.value,g,cur.length)}catch(e){}}
+ if(bad.length)$('retry').onclick=function(){$('min').value=Math.max(3,Math.ceil(bad.length*0.45));start(bad.map(function(b){return b[0]}),'Opakování chyb','retry')};
  $('again').onclick=function(){r.hidden=true;$('setup').hidden=false};scrollTo(0,0)}
 $('start').onclick=function(){var k=sel.value,it;if(k=='MIX'){var all=[];Object.keys(D).forEach(function(x){all=all.concat(D[x].items.slice(0,-3))});it=shuffle(all).slice(0,42).concat(shuffle([D.A.items[67],D.B.items[40],D.C.items[41],D.A.items[68]]).slice(0,3))}else it=D[k].items;start(it,k=='MIX'?'Náhodný mix':D[k].name)};
 $('done').onclick=$('done2').onclick=function(){if(confirm('Odevzdat test?'))finish(false)};})();

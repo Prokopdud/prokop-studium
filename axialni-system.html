@@ -51,7 +51,7 @@ function lev(a,b){const m=[];for(let i=0;i<=a.length;i++){m[i]=[i];for(let j=1;j
 function judge(inp,ans){const n=norm(inp);if(!n)return 0;const A=alts(ans);if(A.includes(n))return 2;if(A.some(x=>x.length>7&&lev(x,n)<=1))return 1;return 0}
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 function scoreEl(ok,n){const p=n?ok/n:0;return `<div class="score ${p>=.85?'good':p>=.6?'mid':'bad'}">${ok} / ${n} (${Math.round(p*100)} %)</div>`}
-function mark(id,ok,n){S.ex[id]={ok,n};save();renderNav()}
+function mark(id,ok,n){S.ex[id]={ok,n};save();renderNav();try{if(window.StudovnaProgress)StudovnaProgress.item(KEY,id,ok,n)}catch(err){}}
 // timer
 let run=false,tick;function fmt(t){t=Math.floor(t);const h=t/3600|0,m=(t%3600)/60|0,s=t%60;return (h?h+':':'')+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
 function tdraw(){$('#tclock').textContent='⏱ '+fmt(S.t);$('#tplay').textContent=run?'⏸':'▶'}

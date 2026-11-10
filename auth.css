@@ -2,7 +2,7 @@ html.gated body{visibility:hidden}html.gated #cwrap,html.gated #cwrap *{visibili
 .uauth{display:inline-flex;gap:8px;align-items:center;margin-left:6px;font-size:.85rem}
 .uauth .uemail{color:var(--mut,#667);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .uauth a{border:1px solid var(--line,#d9dfdc);border-radius:999px;padding:4px 10px;text-decoration:none}
-#hubback .uauth .uemail{display:none}#hubback .uauth a{color:#fff;border-color:rgba(255,255,255,.5)}
+#hubback .uauth .uemail{display:none}#hubback .uauth a,#hubback a.acct{color:#fff;text-decoration:none;padding:8px 11px;border-radius:999px;border-color:rgba(255,255,255,.5)}
 .login{max-width:440px;margin:18px auto 30px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
 .login h1{font-size:1.4rem;margin:0 0 4px}.login .sub{margin:0 0 14px}
 .ltabs{display:flex;gap:6px;margin:0 0 14px;border-bottom:1px solid var(--line)}

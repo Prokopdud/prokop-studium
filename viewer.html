@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; frame-src 'self'; connect-src https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://keguwppdetlgfzozngvk.supabase.co wss://keguwppdetlgfzozngvk.supabase.co; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="light dark">
@@ -25,5 +25,7 @@
 <div class="stage" id="stage"><div class="hint" id="hint">⇆ Přejeď prstem po horní liště pro další lekci</div></div>
 <script src="data.js"></script>
 <script src="viewer.js"></script>
+<script src="track.js"></script>
+<script src="consent.js" data-ga="G-LTRCBRC44Y"></script>
 </body>
 </html>

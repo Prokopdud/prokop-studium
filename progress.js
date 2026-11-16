@@ -16,7 +16,9 @@
     'latina-lekce-04.html': 'latina-lekce-04',
     'latina-lekce-05.html': 'latina-lekce-05',
     'latina-lekce-06.html': 'latina-lekce-06',
-    'simulace-latina.html': 'simulace-latina'
+    'simulace-latina.html': 'simulace-latina',
+    'biologie-p01.html': 'biologie-p01',
+    'biologie-p01-lekce.html': 'biologie-p01'
   };
   var ERR = {
     invalid_code: 'Ten kód nevypadá správně. Zadej ho ve tvaru STUD-XXXX.',

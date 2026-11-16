@@ -3,7 +3,8 @@
 var SOON='připravuje se';
 // Doplňkové možnosti podle slugu (study session = výchozí odkaz karty, přidává se automaticky jako první)
 var EXTRA={
- 'svaly-hlavy-krku':[{icon:'📖',label:'Lekce',note:'Čti → procvič → Anki pauza, 8 kapitol',url:'svaly-hlavy-krku-lekce.html'}]
+ 'svaly-hlavy-krku':[{icon:'📖',label:'Lekce',note:'Čti → procvič → Anki pauza, 8 kapitol',url:'svaly-hlavy-krku-lekce.html'}],
+ 'biologie-p01':[{icon:'📖',label:'Lekce',note:'9 kapitol: čtení, cvičení a slidy',url:'biologie-p01-lekce.html'}]
 };
 var DEFAULT_EXTRA=[{icon:'📖',label:'Lekce',note:SOON,url:null}];
 function opts(slug,href){return [{icon:'✏️',label:'Study session',note:'Procvičování, obrázky, kvízy',url:href}].concat(EXTRA[slug]||DEFAULT_EXTRA)}

@@ -1,5 +1,5 @@
 (function(){'use strict';
-var L=window.STUDY.lessons,$=function(s){return document.getElementById(s)};
+var L=window.STUDY.lessons.filter(function(l){return !l.standalone}),$=function(s){return document.getElementById(s)};
 var i=Math.max(0,L.map(function(l){return l.slug}).indexOf(new URLSearchParams(location.search).get('l')));
 var stage=$('stage'),fr=null;
 function load(n,dir){i=(n+L.length)%L.length;var l=L[i];

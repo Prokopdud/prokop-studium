@@ -37,6 +37,18 @@ assert.strictEqual(bioLekce.r01, 1);
 assert.strictEqual(bioLekce.q001, 1);
 assert.strictEqual(bioLekce.a01, 1);
 assert.ok(M.isKey('bio_p01_study_v1') && M.isKey('bio_p01_lekce_v1'));
+assert.ok(M.isKey('anat_klouby_dk_v1'));
+
+var kl = M.merge('anat_klouby_dk_v1',
+  { ex: { q000: { ok: 0, n: 1, t: 20 } }, t: 4, runs: 2, bestRun: { pts: 800, max: 1000, ok: 1, n: 10, at: 2 }, lastRun: { pts: 100, max: 1000, ok: 0, n: 10, at: 9 } },
+  { ex: { q000: { ok: 1, n: 1, t: 10 }, q001: { ok: 1, n: 1, t: 5 } }, t: 9, runs: 1, bestRun: { pts: 500, max: 1000, ok: 1, n: 10, at: 1 }, lastRun: { pts: 900, max: 1000, ok: 1, n: 10, at: 3 } }
+);
+assert.strictEqual(kl.ex.q000.ok, 0);
+assert.strictEqual(kl.ex.q001.ok, 1);
+assert.strictEqual(kl.t, 9);
+assert.strictEqual(kl.runs, 2);
+assert.strictEqual(kl.bestRun.pts, 800);
+assert.strictEqual(kl.lastRun.at, 9);
 
 var fresh = M.reconcile('latina_study_L1', null, { s1e0: { best: 10 } }, false);
 assert.strictEqual(fresh.writeLocal, true);

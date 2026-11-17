@@ -1,0 +1,66 @@
+/* Kvíz klouby DK – dlaždice ve stylu Kahootu, barvy webu kolem nich. */
+.kh-lead{margin:0 0 12px}
+.kh-panel{margin:0 0 12px}
+.kh-panel h2{margin:0 0 8px;font-size:1.05rem}
+.kh-secs{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.kh-secs .chip{text-align:left;max-width:100%}
+.kh-opt{display:flex;gap:8px;align-items:flex-start;margin:8px 0;font-weight:600}
+.kh-opt input[type=checkbox]{width:auto;min-height:1.15rem;margin-top:3px;flex:none}
+.kh-opt small{display:block;font-weight:400}
+.kh-count{font-variant-numeric:tabular-nums}
+.kh-stats{display:grid;gap:8px;grid-template-columns:1fr 1fr;margin-top:8px}
+@media(min-width:700px){.kh-stats{grid-template-columns:repeat(4,1fr)}}
+.kh-stats b{display:block;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.kh-stats span{color:var(--mut);font-size:.8rem}
+.kh-msg{min-height:1.2em;margin:6px 0 0}
+.kh-screen[hidden],.kh [hidden]{display:none!important}
+
+.kh-hud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 6px;font-variant-numeric:tabular-nums}
+.kh-clock{font-size:1.8rem;font-weight:800;letter-spacing:-.03em;min-width:4.2ch;text-align:center}
+.kh-clock.warn{color:#c4273a}
+[data-theme=dark] .kh-clock.warn{color:#ff8b98}
+.kh-track{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:0 0 10px}
+.kh-track i{display:block;height:100%;width:100%;background:var(--acc);transform-origin:left center}
+.kh-track.warn i{background:#c4273a}
+.kh-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 8px;color:var(--mut);font-size:.85rem}
+.kh-hy{background:#fff3cd;color:#6a4b00;border-radius:999px;padding:2px 8px;font-weight:700;font-size:.75rem}
+[data-theme=dark] .kh-hy{background:#3d3318;color:#f0d48a}
+.kh-q{display:block;margin:0 0 12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;font-size:1.22rem;line-height:1.35;box-shadow:var(--sh)}
+.kh-fig{margin:0 0 12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px;text-align:center}
+.kh-fig img{max-width:100%;max-height:220px;object-fit:contain;border-radius:10px;vertical-align:middle}
+.kh-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kh-tile{position:relative;border:0;border-radius:16px;min-height:118px;color:#fff;font-weight:800;font-size:1.05rem;line-height:1.25;text-align:left;padding:46px 14px 14px;box-shadow:0 7px 0 rgba(0,0,0,.18);text-shadow:0 1px 2px rgba(0,0,0,.35);touch-action:manipulation}
+.kh-tile svg{position:absolute;left:12px;top:10px;width:28px;height:28px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+.kh-tile .kn{position:absolute;right:10px;top:8px;background:rgba(0,0,0,.2);border-radius:8px;min-width:1.6em;text-align:center;font-size:.85rem;padding:2px 6px;text-shadow:none}
+.kh-tile.c0{background:#e21b3c}
+.kh-tile.c1{background:#1368ce}
+.kh-tile.c2{background:#d89e00}
+.kh-tile.c3{background:#26890c}
+.kh-tile:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.kh-tile:active{transform:translateY(2px);box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.kh-grid.lock .kh-tile{pointer-events:none}
+.kh-grid.lock .kh-tile.dim{opacity:.42;filter:saturate(.7)}
+.kh-grid.lock .kh-tile.good{opacity:1;filter:none;box-shadow:0 0 0 4px #fff,0 0 0 8px #14532d}
+.kh-grid.lock .kh-tile.bad{opacity:1;filter:none;box-shadow:0 0 0 4px #fff,0 0 0 8px #7f1d1d}
+.kh-why{margin:12px 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.kh-why p{margin:0 0 8px}
+.kh-verdict{font-size:1.15rem;font-weight:800}
+.kh-verdict.good{color:#0f7a45}
+.kh-verdict.bad{color:#c4273a}
+[data-theme=dark] .kh-verdict.good{color:#7ddea8}
+[data-theme=dark] .kh-verdict.bad{color:#ff8b98}
+.kh-imgbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0 4px}
+.kh-imgbar .sub{flex:1 1 180px}
+.kh-score{font-size:2rem;font-weight:800;margin:0;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.kh-miss{margin:8px 0;padding:10px 0;border-top:1px solid var(--line)}
+.kh-miss b{display:block}
+.kh-miss .sub{display:block;margin-top:2px}
+@media(max-width:600px){
+  .kh-q{font-size:1.05rem;padding:12px}
+  .kh-tile{min-height:104px;font-size:.98rem;padding:42px 12px 12px}
+  .kh-clock{font-size:1.5rem}
+  .kh-score{font-size:1.7rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .kh-tile,.kh-track i{transition:none}
+}

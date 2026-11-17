@@ -6,7 +6,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   var KEYS = [
-    'anat_svaly_hk_study_v1', 'anat_axial_study_v1',
+    'anat_svaly_hk_study_v1', 'anat_axial_study_v1', 'anat_klouby_dk_v1',
     'latina_study_L1', 'latina_study_L2', 'latina_study_L3',
     'latina_study_L4', 'latina_study_L5',     'latina_study_L6',
     'bio_p01_study_v1', 'bio_p01_lekce_v1',
@@ -92,9 +92,52 @@
     return out;
   }
 
-  function anatShape(key) { return key.indexOf('anat_') === 0 || key === 'bio_p01_study_v1'; }
+  function anatShape(key) {
+    return key === 'bio_p01_study_v1' || (key.indexOf('anat_') === 0 && key !== 'anat_klouby_dk_v1');
+  }
+
+  function runPct(r) {
+    if (!r || typeof r !== 'object' || num(r.max) <= 0) return -1;
+    return num(r.pts) / num(r.max);
+  }
+  function betterRun(x, y) {
+    var px = runPct(x), py = runPct(y);
+    if (py > px) return clone(y);
+    if (px > py) return clone(x);
+    if (px < 0) return null;
+    return clone(num(x.pts) >= num(y.pts) ? x : y);
+  }
+  function mergeKlouby(a, b) {
+    a = a || {}; b = b || {};
+    var ex = {};
+    function take(src) {
+      Object.keys(src.ex || {}).forEach(function (k) {
+        var nxt = src.ex[k];
+        if (!nxt || typeof nxt !== 'object') return;
+        var cur = ex[k];
+        if (!cur || num(nxt.t) >= num(cur.t)) ex[k] = clone(nxt);
+      });
+    }
+    take(b);
+    take(a);
+    var last = null;
+    var al = a.lastRun, bl = b.lastRun;
+    if (al && typeof al === 'object' && bl && typeof bl === 'object') last = num(al.at) >= num(bl.at) ? al : bl;
+    else last = (al && typeof al === 'object') ? al : ((bl && typeof bl === 'object') ? bl : null);
+    return {
+      ex: ex,
+      anki: {},
+      inp: {},
+      t: Math.max(num(a.t), num(b.t)),
+      updated: Math.max(num(a.updated), num(b.updated)),
+      runs: Math.max(num(a.runs), num(b.runs)),
+      bestRun: betterRun(a.bestRun, b.bestRun),
+      lastRun: last ? clone(last) : null
+    };
+  }
 
   function merge(key, local, remote) {
+    if (key === 'anat_klouby_dk_v1') return mergeKlouby(local, remote);
     if (anatShape(key)) return mergeAnat(local, remote);
     if (key.indexOf('latina_study_') === 0) return mergeLatina(local, remote);
     if (key === 'sg_hk_proto_v1' || key === 'bio_p01_lekce_v1') return mergeSg(local, remote);

@@ -17,6 +17,7 @@
     'latina-lekce-05.html': 'latina-lekce-05',
     'latina-lekce-06.html': 'latina-lekce-06',
     'simulace-latina.html': 'simulace-latina',
+    'kviz-klouby-dk.html': 'kviz-klouby-dk',
     'biologie-p01.html': 'biologie-p01',
     'biologie-p01-lekce.html': 'biologie-p01'
   };

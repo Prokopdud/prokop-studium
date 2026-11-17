@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="cs" class="gated">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://keguwppdetlgfzozngvk.supabase.co wss://keguwppdetlgfzozngvk.supabase.co; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#1f6f5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="themes.css">
+<link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="kviz-klouby-dk.css">
+<script src="supabase.js"></script>
+<script src="auth.js" data-url="https://keguwppdetlgfzozngvk.supabase.co" data-key="sb_publishable_vde1q6kr64k81rFKdOVTTw_qFQ07n6V"></script>
+<script src="theme.js"></script>
+<title>Kvíz – Klouby a vazy dolní končetiny – Studovna FBMI</title>
+<meta name="description" content="Kvíz z anatomie: klouby a vazy dolní končetiny. 105 otázek, časovač 20 sekund, filtr sekcí a high-yield.">
+</head>
+<body>
+<header class="nav"><div class="navin">
+  <a class="brand" href="index.html"><span class="logo"><img src="logo.svg" alt="" width="38" height="38"></span><span><b>Studovna FBMI</b> <span class="proto">prototyp</span><small>Fyzioterapie · 1. ročník</small></span></a>
+  <nav id="menu" aria-label="Hlavní menu"><a href="index.html"><span aria-hidden="true">🏠</span> Domů</a><a href="lekce.html" class="on" aria-current="page"><span aria-hidden="true">📚</span> Lekce</a><a href="tahak-latina.html"><span aria-hidden="true">📜</span> Tahák</a><a href="anki.html"><span aria-hidden="true">🧠</span> Anki</a><a href="nastroje.html"><span aria-hidden="true">🧰</span> Nástroje</a><a href="updaty.html"><span aria-hidden="true">📰</span> Updaty</a><a href="o-webu.html"><span aria-hidden="true">ℹ️</span> O webu</a></nav>
+  <button class="icon" id="theme" title="Tmavý / světlý režim" aria-label="Přepnout tmavý režim">🌙</button>
+  <button class="icon burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="menu">☰</button>
+</div></header>
+<main class="wrap kh">
+<div id="setup" class="kh-screen">
+  <a class="back" href="lekce.html">← Lekce</a>
+  <div class="phead">
+    <h1>Anatomie – klouby a vazy dolní končetiny</h1>
+    <p class="sub kh-lead">Kvíz ve stylu Kahootu. Na otázku je 20 sekund, za správnou odpověď jsou body a bonus za rychlost (nejvýš 1000). Po vypršení času se otázka počítá jako chyba. Odpovědi se míchají, klávesy 1–4.</p>
+  </div>
+  <p id="loaderr" class="empty" hidden>Otázky se nepodařilo načíst. Obnov stránku.</p>
+  <section class="panel kh-panel" id="filters">
+    <h2>Sekce</h2>
+    <p class="sub">Můžeš jich zapnout víc najednou.</p>
+    <div class="kh-secs" id="secs" role="group" aria-label="Sekce"></div>
+    <div class="btns left">
+      <button type="button" class="btn sm" id="sec-all">Vybrat vše</button>
+      <button type="button" class="btn sm" id="sec-none">Zrušit výběr</button>
+    </div>
+    <label class="kh-opt"><input type="checkbox" id="hy"><span>Jen high-yield<small class="sub" id="hy-note">jen otázky označené jako důležité</small></span></label>
+    <label class="kh-opt"><input type="checkbox" id="shuffle" checked><span>Zamíchat pořadí otázek</span></label>
+    <label class="kh-opt"><input type="checkbox" id="wrongs"><span>Jen chyby<small class="sub" id="wrong-note">otázky, které jsi naposledy zodpověděl špatně</small></span></label>
+    <p class="kh-count" id="picked">Načítám otázky…</p>
+    <div class="btns left"><button type="button" class="btn pri" id="start" disabled>Spustit kvíz</button></div>
+  </section>
+  <section class="panel kh-panel">
+    <h2>Tvůj postup</h2>
+    <div class="kh-stats" id="stats"></div>
+    <p class="sub">Skóre, chybné otázky a statistiky zůstávají v tomto prohlížeči. Po přihlášení se snímek postupu synchronizuje k účtu, jakmile je na serveru zapnutý katalog kvízu.</p>
+  </section>
+  <section class="panel kh-panel">
+    <h2>Vlastní obrázky</h2>
+    <p class="sub">Ke každé otázce si můžeš přidat obrázek (soubor nebo vložení). Uloží se jen v tomto prohlížeči, nikam se neodesílá. Export a import je soubor JSON.</p>
+    <p class="sub" id="imgcount">Uložené obrázky: 0</p>
+    <div class="btns left">
+      <button type="button" class="btn sm" id="img-exp">Exportovat obrázky</button>
+      <button type="button" class="btn sm" id="img-imp">Importovat obrázky</button>
+      <input type="file" id="img-imp-file" accept="application/json,.json" hidden>
+    </div>
+    <p class="kh-msg sub" id="imgmsg" role="status"></p>
+  </section>
+</div>
+
+<div id="play" class="kh-screen" hidden>
+  <div class="kh-hud">
+    <span id="qpos">1 / 1</span>
+    <span id="clock" class="kh-clock" aria-live="off">20.0</span>
+    <span id="livepts">1000 b</span>
+  </div>
+  <div class="kh-track" aria-hidden="true"><i id="kbar"></i></div>
+  <div class="kh-meta"><span id="qsec"></span><span id="qhy" class="kh-hy" hidden>high-yield</span></div>
+  <h2 id="qtext" class="kh-q"></h2>
+  <figure class="kh-fig" id="fig" hidden><img id="figimg" alt="Vlastní obrázek k této otázce"></figure>
+  <div class="kh-grid" id="grid" role="group" aria-label="Odpovědi"></div>
+  <div class="kh-why" id="why" hidden role="status"></div>
+  <div class="kh-imgbar">
+    <button type="button" class="btn sm" id="imgadd">＋ Obrázek</button>
+    <button type="button" class="btn sm" id="imgdel" hidden>Odebrat obrázek</button>
+    <span class="sub">Soubor nebo vložení (Ctrl+V). Zůstane jen v tomto prohlížeči.</span>
+    <input type="file" id="imgfile" accept="image/*" hidden>
+  </div>
+</div>
+
+<div id="result" class="kh-screen" hidden>
+  <a class="back" href="lekce.html">← Lekce</a>
+  <div class="phead"><h1>Výsledek kola</h1></div>
+  <section class="panel kh-panel" id="result-body"></section>
+</div>
+</main>
+<footer class="foot"><div class="footin">
+  <div><b><img class="flogo" src="logo.svg" alt="" width="18" height="18"> Studovna FBMI</b> <span class="proto">prototyp</span><br><span class="sub">Studijní materiály pro 1. ročník fyzioterapie (FBMI ČVUT, Kladno). Přístup po přihlášení e-mailem. Postup v lekcích se ukládá k účtu a v prohlížeči.</span></div>
+  <div class="flinks"><a href="index.html">Domů</a><a href="lekce.html">Lekce</a><a href="tahak-latina.html">Tahák</a><a href="anki.html">Anki</a><a href="nastroje.html">Nástroje</a><a href="updaty.html">Updaty</a><a href="o-webu.html">O webu</a><a href="#" data-consent-reset>Nastavení měření</a></div>
+</div></footer>
+<script src="site.js"></script>
+<script src="kviz-klouby-dk.js"></script>
+<script src="track.js"></script>
+<script src="consent.js" data-ga="G-LTRCBRC44Y"></script>
+</body>
+</html>
